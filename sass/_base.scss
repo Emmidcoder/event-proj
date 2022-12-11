@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Days+One&family=Mulish:wght@400;500;600&family=Rammetto+One&family=Voces&display=swap');
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #cbd5e1;
+    width: 100%;
+    padding: 3rem;
+    position: relative;
+    font-family: 'Courgette', cursive;
+
+}
+
+nav {
+    position: relative;
+}
+
+main {
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    font-size: 5rem;
+    color: forestgreen;
+}
+
+.heading {
+    color: #0891b2;
+    position: absolute;
+    top: 15rem;
+    left: 2rem;
+    width: 45rem;
+    font-size: 3.5rem;
+    font-style: italic;
+    line-height: 6rem;
+    transform: skewX(-160deg);
+}
+
+.container {
+    position: absolute;
+    right: 2%;
+    width: 70rem;
+    margin: 10rem 0;
+    padding: 0 2rem 5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 40rem;
+    grid-gap: 2rem;
+}
+
