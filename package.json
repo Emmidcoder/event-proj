@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
+
   "scripts": {
-    "compile:sass": "node-sass sass/main.scss css/style.comp.css",
-    "prefix:css": "postcss --use autoprefixer -b 'last 10 versions' css/style.comp.css -o css/style.prefix.css"
+    "compile:sass": "node-sass sass/main.scss css/style.comp.css"
+    
 
   },
   "author": "Emmanuel",
