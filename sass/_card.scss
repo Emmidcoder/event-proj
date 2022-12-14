@@ -1,3 +1,10 @@
+.card-container {
+    width: 65rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 35rem;
+    grid-gap: 2rem;
+}
 .card {
     position: relative;
     perspective: 150rem;
@@ -52,10 +59,10 @@
 
 .card3 {
     grid-column: 3/ 4;
+    overflow: hidden;
 
     &>* {
         @include side-prop;
-        overflow: hidden;
-        transition: all 3s ease;
+        transition: all .8s ease;
     }
 }
