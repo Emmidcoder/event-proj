@@ -23,18 +23,20 @@ html {
   font-size: 62.5%;
   scroll-behavior: smooth; }
 
+body {
+  background: #cbd5e1;
+  padding: 0 5rem;
+  padding-bottom: 8rem;
+  font-family: 'Roboto', sans-serif; }
+
 .container {
   display: grid;
   grid-template-rows: repeat(4, min-content);
-  background: #cbd5e1;
-  height: 100vh;
-  padding: 0 5rem;
-  position: relative;
-  font-family: 'Roboto', sans-serif; }
+  position: relative; }
 
 nav {
   position: relative;
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
   height: 100%; }
 
 header {
@@ -48,9 +50,14 @@ main {
   margin-bottom: 5rem; }
 
 .logo {
-  position: absolute;
   font-size: 5rem;
+  height: 100%;
   color: forestgreen; }
+
+.edit {
+  width: 100%;
+  word-wrap: break-word;
+  word-break: break-word; }
 
 .heading-primary {
   color: #0891b2;
@@ -66,22 +73,28 @@ main {
 
 .btn {
   background: transparent;
+  background-color: #47576e;
   border: none;
+  border-radius: 3px;
   box-shadow: -5px 5px 3px rgba(0, 0, 0, 0.423), 5px -5px 3px rgba(255, 255, 255, 0.727);
-  width: 8rem; }
+  width: 8rem;
+  height: 3rem; }
+
+.btn:hover {
+  box-shadow: -6px 6px 3px rgba(0, 0, 0, 0.423), 5px -5px 3px rgba(255, 255, 255, 0.727);
+  transform: scale(1.02); }
+
+.btn:active {
+  box-shadow: inset -6px 6px 3px rgba(0, 0, 0, 0.423), 5px -5px 3px rgba(255, 255, 255, 0.727);
+  transform: scale(1); }
 
 .ft__btn {
   justify-self: flex-end; }
 
 .navigation__con {
-  width: 100%; }
-
-.navigation__nav {
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  gap: 2rem;
-  margin: 0 auto; }
+  justify-content: space-between;
+  width: 100%; }
 
 .navigation__links {
   width: 38rem;
@@ -169,3 +182,170 @@ main {
     transition: all 1s ease-in-out;
     backface-visibility: hidden;
     transition: all .8s ease; }
+
+.usercard {
+  position: relative;
+  max-width: max-content;
+  background-color: #c1dff8;
+  overflow-x: hidden;
+  opacity: 1; }
+  .usercard__img-con {
+    width: 80%;
+    height: 33rem;
+    background-image: url(/img/queen_clipdrop-background-removal.png);
+    background-position: 35% 50%;
+    background-repeat: no-repeat;
+    background-size: cover; }
+  .usercard__circle {
+    position: absolute;
+    right: -8%;
+    top: 17rem;
+    z-index: 2;
+    width: 25rem;
+    height: 25rem;
+    border-radius: 50%;
+    background-color: white; }
+    .usercard__circle::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 24rem;
+      height: 24rem;
+      border-radius: 50%;
+      background-color: #c1dff8; }
+    .usercard__circle__name {
+      position: absolute;
+      top: 15%;
+      left: 12%;
+      font-size: 2.5rem;
+      width: 75%;
+      font-weight: 600; }
+    .usercard__circle--small {
+      top: 30rem;
+      right: 33%;
+      width: 10rem;
+      height: 10rem; }
+      .usercard__circle--small::before {
+        width: 9rem;
+        height: 9rem; }
+    .usercard__circle__inn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      overflow: hidden;
+      width: 21rem;
+      height: 21rem;
+      border-radius: 50%;
+      background-color: white; }
+      .usercard__circle__inn--small {
+        width: 8rem;
+        height: 8rem;
+        background-image: linear-gradient(to left, #7f1d1d, #ea580c); }
+    .usercard__circle__path {
+      color: #fff;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 35%;
+      padding-top: .3rem;
+      font-size: 1.2rem;
+      text-align: center;
+      background-image: linear-gradient(to left, #7f1d1d, #ea580c); }
+      .usercard__circle__path > * {
+        text-align: center;
+        width: 70%;
+        margin: 0 auto; }
+    .usercard__circle__born-t, .usercard__circle__died-t {
+      text-align: center; }
+    .usercard__circle__born--date, .usercard__circle__died--date {
+      color: #fcaf2b;
+      text-align: center; }
+    .usercard__circle__age {
+      color: #fff;
+      font-size: 1.2rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 5rem; }
+    .usercard__circle__num {
+      width: max-content;
+      font-size: 3rem;
+      text-align: center; }
+    .usercard__circle__year {
+      width: 5.5rem;
+      text-align: center; }
+  .usercard__curve1 {
+    margin-top: -6rem;
+    z-index: 0; }
+  .usercard__curve2 {
+    margin-top: -10.5rem;
+    z-index: 0; }
+  .usercard__curve3 {
+    margin-top: -5.5rem;
+    z-index: 0; }
+  .usercard__text-sect {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    grid-gap: 2.5rem;
+    position: relative;
+    z-index: 3;
+    margin-top: -.9rem;
+    padding: 0 1rem 2rem 5rem;
+    width: 100%;
+    background-color: #0369a1;
+    color: white; }
+  .usercard__sect {
+    width: 20rem; }
+    .usercard__sect1 {
+      margin-top: -4rem; }
+    .usercard__sect2 {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem; }
+      .usercard__sect2--clu {
+        border: 1px solid #fff; }
+  .usercard__title {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .5rem;
+    margin-bottom: 1rem;
+    max-width: max-content;
+    height: max-content;
+    text-transform: uppercase;
+    border-bottom: 1px solid #fff; }
+  .usercard__date {
+    color: #000;
+    font-size: 1rem;
+    font-weight: 600;
+    width: max-content;
+    background-color: white;
+    text-transform: uppercase; }
+  .usercard__topic {
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: uppercase; }
+  .usercard__list-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem; }
+
+.input {
+  border-radius: 5px;
+  position: relative;
+  z-index: 40;
+  background-color: #94a3b8;
+  border: none;
+  padding: .2rem .5rem;
+  outline: none;
+  color: #fff;
+  font-size: 1.4rem;
+  resize: none; }

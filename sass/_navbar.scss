@@ -1,18 +1,15 @@
 .navigation {
 
     &__con {
+        display: flex;
+            justify-content: space-between;
         width: 100%;
             // background-color: aqua;
     }
 
-    &__nav {
-        display: flex;
-        justify-content: flex-end;
-            align-items: flex-end;
-        gap: 2rem;
-        margin: 0 auto;
-        // background-color: brown;
-    }
+        // &__nav {
+    
+        // }
 
     &__links {
         width: 38rem;

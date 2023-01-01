@@ -30,7 +30,7 @@ const timing = function () {
             s.style.transform = 'rotateY(-180deg)';
         });
 
-        return wait(1);
+        return wait(.5);
     }).then(() => {
         card2S2.forEach((s) => {
             s.style.transform = 'rotateY(-180deg)';
@@ -43,7 +43,7 @@ const timing = function () {
                 s.style.transform = 'rotateY(0)';
             });
 
-            return wait(1);
+            return wait(.5);
         }).then(() => {
             card2S1.forEach((s) => {
                 s.style.transform = 'rotateY(0)';
@@ -77,6 +77,74 @@ const timing = function () {
         })
 };
 
-timing();
+// timing();/
 
-setInterval(timing, 8000);
+// setInterval(timing, 8000);
+
+const edit = document.querySelectorAll('.edit-p');
+const usercard = document.querySelector('.usercard');
+const over = document.querySelector('.usercard__over');
+const textSect = document.querySelector('.usercard__text-sect');
+
+let target = '', editing = false, cl1, cl2, txtInput;
+
+
+usercard.addEventListener('dblclick', function (e) {
+    target = e.target;
+
+    const edited = e.target.classList.contains('edited');
+    if (edited) return
+
+    const clickedEdit = e.target.classList.contains('edit');
+
+    const [class1, class2] = target.classList
+
+    cl1 = class1
+    cl2 = class2
+
+    if (!clickedEdit) return;
+
+    const width = target.scrollWidth;
+    const initValue = target.textContent.trim('');
+
+    txtInput = document.createElement('textarea');
+    txtInput.classList.add('input', 'edited', `${class2}`)
+    txtInput.setAttribute("rows", "1")
+    txtInput.setAttribute("cols", "20")
+    txtInput.innerHTML = initValue
+    txtInput.style.width = width + 'px'
+
+    target.parentNode?.replaceChild(txtInput, target);
+
+    editing = true
+
+    txtInput.focus()
+
+    textHeight()
+})
+
+const textHeight = function () {
+    txtInput.style.height = (txtInput.scrollHeight) + "px"
+}
+
+usercard.addEventListener('keypress', textHeight);
+usercard.addEventListener('keyup', textHeight);
+
+
+document.addEventListener('click', function (e) {
+
+    if (editing) {
+
+        const edited = e.target.classList.contains('edited')
+
+        if (edited) return
+
+        const edit = document.createElement('p');
+        edit.classList.add('edit', `${cl2}`)
+
+        edit.innerHTML = txtInput?.value;
+        txtInput.parentNode?.replaceChild(edit, txtInput);
+
+        editing = false
+    }
+});
