@@ -89,13 +89,23 @@ const edit = document.querySelectorAll('.edit');
 const back = document.querySelector('.back');
 const forward = document.querySelector('.forward');
 
-let uploadImage = '', target = '', cl1, cl2, cl3, txtInput, editing = false, counter = 0;
-const prevTexts = [], prevElems = [], nextElems = [], nextTexts = [];
+let uploadImage = '',
+    target = '',
+    cl1, cl2, cl3,
+    txtInput,
+    editing = false,
+    initValue,
+    curState = [],
+    store = [];
+
+const prevState = [],
+    prevState2 = [];
+
 
 usercard.addEventListener('dblclick', function (e) {
     target = e.target;
     editing = true
-    
+
     // To change OR Uploading an Image
     const image = e.target.classList.contains('usercard__img--edit');
     if (image) {
@@ -123,6 +133,12 @@ usercard.addEventListener('dblclick', function (e) {
                 uploadImage = reader.result
 
                 newImage.style.backgroundImage = `url(${uploadImage})`
+
+
+
+                // const preImgE = 'usercard__img--edit';
+                // prevElems.push(preImgE)
+                // pr
             })
             reader.readAsDataURL(this.files[0])
         })
@@ -132,7 +148,7 @@ usercard.addEventListener('dblclick', function (e) {
     const typing = e.target.classList.contains('input');
     if (typing) return
 
-    const clickedEdit = e.target.classList.contains('edit'); 
+    const clickedEdit = e.target.classList.contains('edit');
     if (clickedEdit) {
         const [class1, class2, class3] = target.classList
         cl1 = class1
@@ -140,7 +156,8 @@ usercard.addEventListener('dblclick', function (e) {
         cl3 = class3
 
         const width = target.scrollWidth;
-        const initValue = target.textContent.trim('');
+
+        initValue = target.textContent.trim('');
 
         txtInput = document.createElement('textarea');
         txtInput.classList.add('input', `${cl3}`)
@@ -150,30 +167,51 @@ usercard.addEventListener('dblclick', function (e) {
 
         target.parentNode?.replaceChild(txtInput, target);
         txtInput.focus()
-        
-        prevElems.push(cl2)
-        prevTexts.push(initValue)
     }
 })
 
-usercard.addEventListener('keyup', e => {
-    txtInput.style.height = 'auto'
+const txtHeight = (e) => {
+    txtInput.style.height = '2rem'
     txtInput.style.height = (e.target.scrollHeight) + "px"
-});
+}
+
+usercard.addEventListener('keypress', (e) => txtHeight(e))
+usercard.addEventListener('keyup', (e) => txtHeight(e))
+
+
+const inverted = (classN, text) => {
+    const obj = {
+        elemt: classN,
+        value: text,
+    }
+
+    return obj
+}
 
 document.addEventListener('click', function (e) {
-    const typing = e.target.classList.contains('input')
+    const typing = e.target.classList.contains('input',)
     if (typing) return
 
     if (editing) {
         const editedValue = txtInput?.value;
-
         const edit = document.createElement('p');
+
         edit.classList.add(`${cl1}`, `${cl2}`, `${cl3}`)
         edit.innerHTML = editedValue
 
-        // console.log(nextElems);
-        // console.log(nextTexts);
+        if (initValue !== editedValue) {
+            const initText = inverted(edit, initValue)
+            prevState.push(initText)
+
+            const curDom = inverted(cl2, editedValue)
+            store.push(curDom)
+            console.log(store);
+
+            localStorage.setItem('state', JSON.stringify(store));
+
+
+            curState = []
+        }
 
         txtInput?.parentNode?.replaceChild(edit, txtInput);
 
@@ -182,53 +220,62 @@ document.addEventListener('click', function (e) {
 });
 
 back.addEventListener('click', function () {
-    if (prevElems.length === 0) return;
+    if (prevState.length === 0) return;
+    const prevElem = prevState.pop();
+    prevState2.push(prevElem);
 
-    const prevElem = prevElems.pop();
-    const prevText = prevTexts.pop();
+    const prevText = inverted(prevElem.elemt, prevElem.elemt.textContent);
+    curState.push(prevText);
 
-    
-    console.log(prevElem);
-    console.log(nextElems);
-    console.log(prevTexts);
-    console.log(prevElems);
-    
-    
-    // console.log(prevElem);
-    const elem = document.querySelector(`.${prevElem}`);
-    console.log(elem.textContent);
-    
-    nextElems.push(prevElem)
-    nextTexts.push(elem.textContent);
+    prevElem.elemt.textContent = prevElem.value;
 
-    elem.textContent = prevText;
+    const selectElemt = store.find(elem => elem.elemt === prevElem.elemt)
+    const delElemt = store.indexOf(selectElemt);
+    store.splice(delElemt, 1)
 
-    // counter++
-    // console.log(counter);
+    const curDom = inverted(prevElem.elemt.classList[1], prevElem.value)
+    store.push(curDom)
+    localStorage.setItem('state', JSON.stringify(store));
 
-    // count++
+
 })
 
 forward.addEventListener('click', function () {
-    if (nextElems.length === 0) return;
-    // if (counter > 0) {
-        const nextElem = nextElems.pop();
-        const nextText = nextTexts.pop();
-        
-        // console.log(nextElem);
-        
-        prevElems.push(nextElem)
-        prevTexts.push(nextText)
-        
-        console.log(prevTexts);
-        console.log(prevElems);    
+    if (curState.length === 0) return;
+    const prevElem2 = prevState2.pop()
+    prevState.push(prevElem2)
 
-        // console.log(nextElem);
-        const elem = document.querySelector(`.${nextElem}`);
+    const curElem = curState.pop()
+    curElem.elemt.textContent = curElem.value
 
-        elem.textContent = nextText;
+    const selectElemt = store.find(elem => elem.elemt === curElem.elemt)
+    const delElemt = store.indexOf(selectElemt);
+    store.splice(delElemt, 1)
 
-        // counter--;
+    const curDom = inverted(curElem.elemt.classList[1], curElem.value)
+    store.push(curDom)
+    console.log(store);
+    localStorage.setItem('state', JSON.stringify(store));
 
-    // }
 })
+
+const render = function (store) {
+    store.forEach(stElemt => {
+        const renderElemt = document.querySelector(`.${stElemt.elemt}`)
+        console.log(renderElemt)
+        renderElemt.textContent = stElemt.value
+    })
+}
+
+const getLocalStorage = function () {
+    const data = JSON.parse(localStorage.getItem('state'))
+    if (!data) return;
+
+    store = data
+
+    render(store)
+
+    console.log(data[0].elemt);
+}
+getLocalStorage()
+

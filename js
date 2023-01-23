@@ -216,3 +216,14 @@ document.addEventListener('click', function (e) {
 
 // </html>
 
+const function(clsN, text){
+   return const obj = {
+        elemt: clsN,
+        value: text,
+
+       doElem (){
+            const elem = document.querySelector(`.${this.elemt}`);
+            elem.textContent = this.value;
+        }
+    }
+}

@@ -114,6 +114,10 @@
                 top: 15%;
                 left: 12%;
                 width: 75%;
+
+                &>*{
+                    max-height: max-content;
+                }
             }
 
             &--small {
@@ -318,6 +322,7 @@
             padding-top: 5px;
             text-transform: uppercase;
             border-bottom: 1px solid #fff;
+            max-height: max-content;
         }
 
         &__date {
@@ -326,12 +331,14 @@
             padding-left: .5rem;
             background-color: white;
             text-transform: uppercase;
+            max-height: max-content;
         }
 
         &__topic {
             font-size: 1.2rem;
             font-weight: 500;
             text-transform: uppercase;
+            max-height: max-content;
         }
 
         &__list-items {
