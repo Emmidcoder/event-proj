@@ -1,0 +1,23 @@
+.input {
+    background-color: #94a3b8;
+    resize: none;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    color: inherit;
+    height: inherit;
+    text-align: inherit;
+    max-height: 16rem;
+    width: 100%;
+    -ms-overflow-style: none;
+    scrollbar-width: 0;
+    padding-left: 3px;
+
+    border-radius: 8px;
+    
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
