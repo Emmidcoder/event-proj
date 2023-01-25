@@ -95,12 +95,11 @@ let uploadImage = '',
     txtInput,
     editing = false,
     initValue,
-    curState = [],
-    store = [];
-
-const prevState = [],
-    prevState2 = [];
-
+    state = [],
+    redoState = [],
+    undoState = [],
+    redoStore = [],
+    undoStore = [];
 
 usercard.addEventListener('dblclick', function (e) {
     target = e.target;
@@ -137,7 +136,7 @@ usercard.addEventListener('dblclick', function (e) {
 
 
                 // const preImgE = 'usercard__img--edit';
-                // prevElems.push(preImgE)
+                // undoElems.push(preImgE)
                 // pr
             })
             reader.readAsDataURL(this.files[0])
@@ -200,17 +199,23 @@ document.addEventListener('click', function (e) {
         edit.innerHTML = editedValue
 
         if (initValue !== editedValue) {
-            const initText = inverted(edit, initValue)
-            prevState.push(initText)
+            const initDomE = inverted(cl2, initValue)
+            undoState.push(initDomE)
 
-            const curDom = inverted(cl2, editedValue)
-            store.push(curDom)
-            console.log(store);
+            if (undoStore.length <= 0) {
+                undoStore = [...undoState];
 
-            localStorage.setItem('state', JSON.stringify(store));
+            } else {
+                undoStore.push(initDomE);
+            }
 
+            const editedDom = inverted(cl2, editedValue)
+            state.push(editedDom);
 
-            curState = []
+            localStorage.setItem('undoState', JSON.stringify(undoStore));
+            localStorage.setItem('state', JSON.stringify(state));
+
+            redoState = []
         }
 
         txtInput?.parentNode?.replaceChild(edit, txtInput);
@@ -219,63 +224,79 @@ document.addEventListener('click', function (e) {
     }
 });
 
-back.addEventListener('click', function () {
-    if (prevState.length === 0) return;
-    const prevElem = prevState.pop();
-    prevState2.push(prevElem);
+back.addEventListener('click', () => {
+    if (editing) return;
+    if (undoState.length === 0) return;
 
-    const prevText = inverted(prevElem.elemt, prevElem.elemt.textContent);
-    curState.push(prevText);
+    const undoElem = undoState.pop();
+    undoStore = [...undoState]
 
-    prevElem.elemt.textContent = prevElem.value;
+    const elemt = document.querySelector(`.${undoElem.elemt}`)
 
-    const selectElemt = store.find(elem => elem.elemt === prevElem.elemt)
-    const delElemt = store.indexOf(selectElemt);
-    store.splice(delElemt, 1)
+    const redoDomE = inverted(undoElem.elemt, elemt.textContent);
+    redoState.push(redoDomE)
 
-    const curDom = inverted(prevElem.elemt.classList[1], prevElem.value)
-    store.push(curDom)
-    localStorage.setItem('state', JSON.stringify(store));
+    redoStore = [...redoState];
 
+    elemt.textContent = undoElem.value
 
+    const selectElemts = state.find(elem => elem.elemt === undoElem.elemt)
+    const delElemts = state.indexOf(selectElemts);
+    state.splice(delElemts, 1);
+
+    state.push(undoElem);
+
+    localStorage.setItem('redoState', JSON.stringify(redoStore));
+    localStorage.setItem('undoState', JSON.stringify(undoState));
+    localStorage.setItem('state', JSON.stringify(state));
 })
 
-forward.addEventListener('click', function () {
-    if (curState.length === 0) return;
-    const prevElem2 = prevState2.pop()
-    prevState.push(prevElem2)
+forward.addEventListener('click', () => {
+    if (editing) return;
+    if (redoState.length === 0) return;
 
-    const curElem = curState.pop()
-    curElem.elemt.textContent = curElem.value
+    const redoElem = redoState.pop()
+    redoStore = redoState;
 
-    const selectElemt = store.find(elem => elem.elemt === curElem.elemt)
-    const delElemt = store.indexOf(selectElemt);
-    store.splice(delElemt, 1)
+    const elemt = document.querySelector(`.${redoElem.elemt}`)
 
-    const curDom = inverted(curElem.elemt.classList[1], curElem.value)
-    store.push(curDom)
-    console.log(store);
-    localStorage.setItem('state', JSON.stringify(store));
+    const undoDomE = inverted(redoElem.elemt, elemt.textContent);
+    undoState.push(undoDomE)
 
+    undoStore = [...undoState];
+
+    elemt.textContent = redoElem.value;
+
+    const selectElemts = state.find(elem => elem.elemt === redoElem.elemt)
+    const delElemts = state.indexOf(selectElemts);
+    state.splice(delElemts, 1);
+
+    state.push(redoElem);
+
+    localStorage.setItem('redoState', JSON.stringify(redoStore));
+    localStorage.setItem('undoState', JSON.stringify(undoStore));
+    localStorage.setItem('state', JSON.stringify(state));
 })
 
-const render = function (store) {
-    store.forEach(stElemt => {
+const render = state => {
+    state.forEach(stElemt => {
         const renderElemt = document.querySelector(`.${stElemt.elemt}`)
-        console.log(renderElemt)
-        renderElemt.textContent = stElemt.value
+        renderElemt.textContent = stElemt?.value
     })
 }
 
-const getLocalStorage = function () {
+const getLocalStorage = () => {
     const data = JSON.parse(localStorage.getItem('state'))
-    if (!data) return;
+    const undoData = JSON.parse(localStorage.getItem('undoState'))
+    const redoData = JSON.parse(localStorage.getItem('redoState'))
+    if (data) {
+        state = data;
+        render(state);
+    }
 
-    store = data
+    if (undoData) undoState = undoData;
 
-    render(store)
-
-    console.log(data[0].elemt);
+    if (redoData) redoState = redoData;
 }
 getLocalStorage()
 
