@@ -83,8 +83,8 @@ const timing = function () {
 
 const usercard = document.querySelector('.usercard');
 const textSect = document.querySelector('.usercard__text-sect');
-const image = document.querySelector('.image');
 const imageCon = document.querySelector('.usercard__img-con');
+const img = document.querySelector('.usercard__img');
 const edit = document.querySelectorAll('.edit');
 const back = document.querySelector('.back');
 const forward = document.querySelector('.forward');
@@ -106,10 +106,12 @@ usercard.addEventListener('dblclick', function (e) {
     editing = true
 
     // To change OR Uploading an Image
-    const image = e.target.classList.contains('usercard__img--edit');
+    const image = target.classList.contains('usercard__img');
     if (image) {
+        const initImg = window.getComputedStyle(img).backgroundImage;
         const imageInput = document.createElement('input')
         imageInput.setAttribute('type', 'file')
+        imageInput.setAttribute('id', 'fileupload')
         imageInput.setAttribute('accept', 'image/png')
         imageInput.classList.add('usercard__img--input')
 
@@ -120,27 +122,34 @@ usercard.addEventListener('dblclick', function (e) {
         `
         imageCon.insertAdjacentHTML('afterbegin', html)
 
-        imageInput.addEventListener('change', function () {
+        imageInput.addEventListener('change', function (e) {
+            if (this.files && this.files[0]) {
+                imageCon.firstElementChild.hidden = true;
 
-            const newImage = document.createElement('div')
-            newImage.classList.add('usercard__img--edit')
+                const newImage = document.createElement('img')
 
-            imageInput.parentNode?.replaceChild(newImage, imageInput)
+                newImage.classList.add(`${target.classList[0]}`)
 
-            const reader = new FileReader()
-            reader.addEventListener('load', () => {
-                uploadImage = reader.result
+                imageInput.parentNode?.replaceChild(newImage, imageInput)
 
-                newImage.style.backgroundImage = `url(${uploadImage})`
+                newImage.onload = () => {
+                    URL.revokeObjectURL(newImage.style);  // no longer needed, free memory
+                }
+
+                uploadImage = "url(" + URL.createObjectURL(e.target.files[0]) + ")";
+
+                newImage.style.backgroundImage = uploadImage;
 
 
+                const initImgE = `${target.classList[0]}`;
+                const undoDomE = inverted(initImgE, `${initImg}`);
+                // undoState.push(undoDomE)
 
-                // const preImgE = 'usercard__img--edit';
-                // undoElems.push(preImgE)
-                // pr
-            })
-            reader.readAsDataURL(this.files[0])
-        })
+                const editedDomE = inverted(initImgE, uploadImage);
+                state.push(editedDomE);
+                localStorage.setItem('state', JSON.stringify(state));
+            }
+        });
     }
 
     //Edit Text
@@ -149,10 +158,10 @@ usercard.addEventListener('dblclick', function (e) {
 
     const clickedEdit = e.target.classList.contains('edit');
     if (clickedEdit) {
-        const [class1, class2, class3] = target.classList
-        cl1 = class1
-        cl2 = class2
-        cl3 = class3
+        const [class1, class2, class3] = target.classList;
+        cl1 = class1;
+        cl2 = class2;
+        cl3 = class3;
 
         const width = target.scrollWidth;
 
@@ -170,7 +179,7 @@ usercard.addEventListener('dblclick', function (e) {
 })
 
 const txtHeight = (e) => {
-    txtInput.style.height = '2rem'
+    txtInput.style.height = '1rem'
     txtInput.style.height = (e.target.scrollHeight) + "px"
 }
 
@@ -209,6 +218,8 @@ document.addEventListener('click', function (e) {
                 undoStore.push(initDomE);
             }
 
+            console.log(undoState);
+
             const editedDom = inverted(cl2, editedValue)
             state.push(editedDom);
 
@@ -233,12 +244,24 @@ back.addEventListener('click', () => {
 
     const elemt = document.querySelector(`.${undoElem.elemt}`)
 
-    const redoDomE = inverted(undoElem.elemt, elemt.textContent);
-    redoState.push(redoDomE)
+    let redoDomE
+    if (undoElem.elemt.startsWith('editt')) {
+        redoDomE = inverted(undoElem.elemt, elemt.textContent);
+
+        elemt.textContent = undoElem.value;
+    } else {
+        redoDomE = inverted(undoElem.elemt, elemt.style.backgroundImage);
+
+        // elemt.style.background = "none";
+        elemt.style.backgroundImage = undoElem.value;
+    }
+
+    redoState.push(redoDomE);
+
+
+    console.log(redoState);
 
     redoStore = [...redoState];
-
-    elemt.textContent = undoElem.value
 
     const selectElemts = state.find(elem => elem.elemt === undoElem.elemt)
     const delElemts = state.indexOf(selectElemts);
@@ -281,7 +304,12 @@ forward.addEventListener('click', () => {
 const render = state => {
     state.forEach(stElemt => {
         const renderElemt = document.querySelector(`.${stElemt.elemt}`)
-        renderElemt.textContent = stElemt?.value
+        if (stElemt.elemt.startsWith('editt')) {
+            renderElemt.textContent = stElemt.value
+        } else {
+            console.log(stElemt.value);
+            renderElemt.style.backgroundImage = stElemt.value
+        }
     })
 }
 

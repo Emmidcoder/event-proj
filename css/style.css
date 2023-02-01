@@ -225,7 +225,8 @@ main {
 
 .usercard-con {
   display: flex;
-  max-width: max-content; }
+  max-width: max-content;
+  margin: 0 auto; }
   @media only screen and (max-width: 800px) {
     .usercard-con {
       flex-direction: column-reverse; } }
@@ -245,22 +246,21 @@ main {
     .usercard-con .usercard__img-con {
       width: 80%;
       height: 33rem;
+      user-select: none;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       gap: 2rem; }
     .usercard-con .usercard__img {
-      background-image: url(/img/queen_clipdrop-background-removal.png); }
-      .usercard-con .usercard__img--edit {
-        width: 100%;
-        height: 33rem;
-        background-position: 35% 50%;
-        background-repeat: no-repeat;
-        background-size: cover; }
-      .usercard-con .usercard__img--text {
-        font-size: 1.2rem;
-        user-select: none; }
+      background-image: url(/img/queen_clipdrop-background-removal.png);
+      width: 100%;
+      height: 33rem;
+      background-position: 35% 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border: none;
+      outline: none; }
     .usercard-con .usercard__circle {
       position: absolute;
       right: -5rem;
@@ -309,8 +309,6 @@ main {
         top: 15%;
         left: 12%;
         width: 75%; }
-        .usercard-con .usercard__circle__names > * {
-          max-height: max-content; }
       .usercard-con .usercard__circle--small {
         top: 31rem;
         right: 33%;
